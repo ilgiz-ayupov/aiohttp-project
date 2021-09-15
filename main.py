@@ -26,5 +26,5 @@ if args.reload:
     print("Start with code reload")
     aioreloader.start()
 
-if __name__ == "__main__":
-    web.run_app(app, port=int(os.getenv("PORT")))
+
+web.run_app(app, port=int(os.getenv("PORT")))
