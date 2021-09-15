@@ -26,5 +26,5 @@ if args.reload:
     print("Start with code reload")
     aioreloader.start()
 
-
-web.run_app(app, host="https://heroku-webhook-bot.herokuapp.com/", port=int(os.getenv("PORT")))
+print("Запуск сервера !")
+web.run_app(app, port=int(os.environ["PORT"]))
