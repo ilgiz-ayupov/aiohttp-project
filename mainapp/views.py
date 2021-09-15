@@ -6,3 +6,7 @@ from aiohttp_jinja2 import template
 async def index(request):
     print(request)
     return {"username": "Ильгиз"}
+
+
+async def webhook(request):
+    print(request)
