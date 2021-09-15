@@ -27,4 +27,4 @@ if args.reload:
     aioreloader.start()
 
 if __name__ == "__main__":
-    web.run_app(app, host="https://heroku-webhook-bot.herokuapp.com", port=int(os.getenv("PORT")))
+    web.run_app(app, host="heroku-webhook-bot.herokuapp.com", port=int(os.getenv("PORT")))
