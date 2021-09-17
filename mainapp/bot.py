@@ -22,8 +22,10 @@ async def start(message: types.Message):
 
 
 def start_webhook():
+    delete_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?drop_pending_updates=True"
+    requests.post(delete_webhook)
+
     print(f"WEBHOOK установлен {WEBHOOK_URL}")
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={WEBHOOK_URL}"
-    response = requests.post(url)
-    print(response.json())
+    set_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={WEBHOOK_URL}"
+    response = requests.post(set_webhook)
     return response.status_code
