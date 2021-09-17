@@ -18,7 +18,7 @@ dp.middleware.setup(LoggingMiddleware())
 @dp.message_handler()
 async def start(message: types.Message):
     chat_id = message.chat.id
-    return SendMessage(chat_id, message.text)
+    await bot.send_message(chat_id, message.text)
 
 
 def start_webhook():
