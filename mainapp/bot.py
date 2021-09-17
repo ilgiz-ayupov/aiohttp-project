@@ -8,9 +8,11 @@ from aiogram.utils.executor import start_webhook
 from .settings import (BOT_TOKEN, WEBHOOK_URL, WEBHOOK_HOST,
                        WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT)
 
+logging.basicConfig(level=logging.INFO)
+
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher(bot)
-dp.middleware.setup(LoggingMiddleware)
+dp.middleware.setup(LoggingMiddleware())
 
 
 @dp.message_handler()
