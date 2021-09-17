@@ -29,8 +29,8 @@ if args.reload:
 
 if __name__ == "__main__":
     print("Запуск сервера !")
+    bot.start_bot()
     if args:
         web.run_app(app, host=args.host, port=args.port)
     else:
         web.run_app(app, port=int(os.environ["PORT"]))
-    bot.start_bot()
