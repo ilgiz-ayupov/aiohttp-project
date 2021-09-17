@@ -7,13 +7,6 @@ from aiohttp import web
 from mainapp import create_app
 from mainapp import bot
 
-try:
-    import uvloop
-
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-except ImportError:
-    print("Library uvloop is not available.")
-
 parser = argparse.ArgumentParser(description="Aiohttp project")
 parser.add_argument("--host", help="YOUR HOST", default="localhost")
 parser.add_argument("--port", help="YOUR PORT", default=5000)
@@ -29,7 +22,7 @@ if args.reload:
 
 if __name__ == "__main__":
     print("Запуск сервера !")
-    bot.start_bot()
+    bot.start_webhook()
     if args:
         web.run_app(app, host=args.host, port=args.port)
     else:
