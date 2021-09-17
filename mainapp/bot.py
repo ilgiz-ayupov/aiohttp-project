@@ -20,6 +20,7 @@ async def start(message: types.Message):
 
 
 async def on_startup(dp: Dispatcher):
+    print(f"WEBHOOK установлен: {WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
 
 
