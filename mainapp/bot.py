@@ -29,7 +29,7 @@ def start_webhook():
     set_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook"
     response = requests.post(set_webhook, params={
         "url": WEBHOOK_URL,
-        "max_connections": 1,
+        "max_connections": 40,
         "drop_pending_updates": True
     })
     return response.status_code
