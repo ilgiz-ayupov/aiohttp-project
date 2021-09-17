@@ -26,6 +26,9 @@ def start_webhook():
     requests.post(delete_webhook)
 
     print(f"WEBHOOK установлен {WEBHOOK_URL}")
-    set_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={WEBHOOK_URL}"
-    response = requests.post(set_webhook)
+    set_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook"
+    response = requests.post(set_webhook, params={
+        "url": WEBHOOK_URL,
+        "max_connections": 1
+    })
     return response.status_code
