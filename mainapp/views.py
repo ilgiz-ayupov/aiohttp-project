@@ -12,7 +12,6 @@ async def index(request: web.Request):
 
 
 async def webhook(request: web.Request):
-    await bot.dp.skip_updates()
     data = await request.json()
     print("DATA", data)
     update = types.Update().to_object(data=data)
