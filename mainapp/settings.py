@@ -1,6 +1,6 @@
 import os
 
-BOT_TOKEN = "1969091536:AAFHAq4kVmAx39t3dCsDvJveWZi9mqsMeqo"
+BOT_TOKEN = "2025046509:AAFb52T3xQNd1fv3Md2oZUD1BiMme2JtQLI"
 
 # webhook settings
 WEBHOOK_HOST = "https://heroku-webhook-bot.herokuapp.com"
