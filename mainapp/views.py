@@ -14,7 +14,7 @@ async def index(request: web.Request):
 async def webhook(request: web.Request):
     data = await request.json()
     print("DATA", data)
-    update = types.Update().as_json()
+    update = types.Update().to_object(data=data)
     print("UPDATE", update)
-    await bot.dp.process_update(data)
+    await bot.dp.process_update(update)
     return "!", 200
