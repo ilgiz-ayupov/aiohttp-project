@@ -3,8 +3,8 @@ import logging
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
 from .settings import BOT_TOKEN, WEBHOOK_URL
+from . import keyboards
 
 import requests
 
@@ -18,7 +18,16 @@ dp.middleware.setup(LoggingMiddleware())
 @dp.message_handler()
 async def start(message: types.Message):
     chat_id = message.chat.id
-    await bot.send_message(chat_id, message.text)
+    first_name = message.chat.first_name
+    await bot.send_message(chat_id, text=f"Привет {first_name}")
+
+    await bot.send_message(chat_id, "Начать викторину ?", reply_markup=keyboards.generate_quiz_start_menu())
+
+
+@dp.message_handler(lambda message: "Начать викторину" in message.text)
+async def start_quiz(message):
+    chat_id = message.chat.id
+    await bot.send_message(chat_id, "Викторина началась !")
 
 
 def start_webhook():
