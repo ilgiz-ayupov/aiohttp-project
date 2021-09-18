@@ -15,7 +15,7 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
-@dp.message_handler()
+@dp.message_handler(commands=["start"])
 async def start(message: types.Message):
     chat_id = message.chat.id
     first_name = message.chat.first_name
