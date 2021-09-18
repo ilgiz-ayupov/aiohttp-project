@@ -22,7 +22,9 @@ async def webhook(request: web.Request):
     await bot.dp.process_update(update)
 
     data_as_bytes = bytes(json.dumps(data), encoding="UTF-8")
+    print(data_as_bytes)
     out_data = gzip.compress(data_as_bytes, compresslevel=5)
+    print(out_data)
     return web.Response(
         body=out_data,
         headers={
