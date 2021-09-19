@@ -7,6 +7,7 @@ from .settings import BOT_TOKEN, WEBHOOK_URL
 from . import keyboards
 
 import requests
+from database import database
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,8 +21,21 @@ async def start(message: types.Message):
     chat_id = message.chat.id
     first_name = message.chat.first_name
     await bot.send_message(chat_id, text=f"Привет {first_name}")
-
+    await register_user(message)
     await bot.send_message(chat_id, "Начать викторину ?", reply_markup=keyboards.generate_quiz_start_menu())
+
+
+async def register_user(message: types.Message):
+    telegram_id = message.chat.id
+    user_name = message.chat.username
+
+    database.cursor("""INSERT INTO users (telegram_id, user_name) VALUES (?, ?)
+        ON CONFLICT(telegram_id) DO NOTHING
+    """, (telegram_id, user_name))
+    database.database.commit()
+    await bot.send_message(telegram_id, "Авторизация прошла успешно !")
+
+
 
 
 @dp.message_handler(lambda message: "Начать викторину" in message.text)
