@@ -1,12 +1,10 @@
 import os
-import asyncio
 import argparse
 
 import aioreloader
 from aiohttp import web
-from mainapp import create_app
+from mainapp import create_app, database
 from mainapp import bot
-from database import database
 
 parser = argparse.ArgumentParser(description="Aiohttp project")
 parser.add_argument("--host", help="YOUR HOST", default="localhost")

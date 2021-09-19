@@ -4,10 +4,9 @@ from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from .settings import BOT_TOKEN, WEBHOOK_URL
-from . import keyboards
+from . import keyboards, database
 
 import requests
-from database import database
 
 logging.basicConfig(level=logging.INFO)
 
@@ -28,14 +27,19 @@ async def start(message: types.Message):
 async def register_user(message: types.Message):
     telegram_id = message.chat.id
     user_name = message.chat.username
+    first_name = message.chat.first_name
+    doc_ref = database.db.collection(u'users').document(str(user_name))
+    doc_ref.set({
+        u'username': user_name,
+        u'first_name': first_name,
+        u'telegram_id': telegram_id
+    })
 
-    database.cursor("""INSERT INTO users (telegram_id, user_name) VALUES (?, ?)
-        ON CONFLICT(telegram_id) DO NOTHING
-    """, (telegram_id, user_name))
-    database.database.commit()
-    await bot.send_message(telegram_id, "Авторизация прошла успешно !")
+    users_ref = database.db.collection(u'users')
+    docs = users_ref.stream()
 
-
+    for doc in docs:
+        print(f'{doc.id} => {doc.to_dict()}')
 
 
 @dp.message_handler(lambda message: "Начать викторину" in message.text)
