@@ -71,10 +71,11 @@ async def send_question(message: types.Message, question_id: int = 1):
         await bot.send_message(chat_id, "Вопрос не найден !")
 
 
-@dp.message_handler(lambda message: True)
+@dp.message_handler()
 async def check_answer(message):
     chat_id = message.chat.id
     user_answer = message.text
+    print("ОТВЕТ ПОЛЬЗОВАТЕЛЯ", user_answer)
 
     user = database.db.collection(u'users').document(str(chat_id))
     user_doc = user.get()
@@ -86,7 +87,7 @@ async def check_answer(message):
 
     if question_doc.exists and user_doc.exists:
         question_data = question_doc.to_dict()
-        print(f"{user_answer} {question_data['answer']}")
+        print(user_answer, question_data['answer'])
         if question_data["answer"] == user_answer:
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
