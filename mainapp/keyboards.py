@@ -7,7 +7,7 @@ def generate_quiz_start_menu() -> ReplyKeyboardMarkup:
     ], resize_keyboard=True)
 
 
-def generate_answer_options_menu(answer_options: list, max_quantity: int) -> ReplyKeyboardMarkup:
+def generate_answer_options_menu(answer_options: list, max_quantity: int = 2) -> ReplyKeyboardMarkup:
     start = 0
     end = max_quantity
     rows = len(answer_options) // max_quantity
