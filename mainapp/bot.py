@@ -78,9 +78,9 @@ async def check_answer(message):
         question_data = question_doc.to_dict()
         user_data = user_doc.to_dict()
         if question_data["answer"] == user_answer:
-            user_data["true_answer"] = user.get("true_answer", 0) + 1
+            user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
-            user_data["false_answer"] = user.get("false_answer", 0) + 1
+            user_data["false_answer"] = user_data.get("false_answer", 0) + 1
         user.set(user_data)
     else:
         await bot.send_message(chat_id, "Вопрос не найден !")
