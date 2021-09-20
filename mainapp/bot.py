@@ -65,7 +65,25 @@ async def send_question(message: types.Message, question_id: int = 1):
 
 @dp.message_handler(lambda message: True)
 async def check_answer(message):
-    pass
+    chat_id = message.chat.id
+    user_answer = message.text
+    question_id = 1
+
+    question = database.db.collection(u'questions').document(str(question_id))
+    question_doc = question.get()
+
+    user = database.db.collection(u'users').document(str(question_id))
+    user_doc = question.get()
+    if question_doc.exists and user_doc.exists:
+        question_data = question_doc.to_dict()
+        user_data = user_doc.to_dict()
+        if question_data["answer"] == user_answer:
+            user_data["true_answer"] = user.get("true_answer", 0) + 1
+        else:
+            user_data["false_answer"] = user.get("false_answer", 0) + 1
+        user.set(user_data)
+    else:
+        await bot.send_message(chat_id, "Вопрос не найден !")
 
 
 def start_webhook():
