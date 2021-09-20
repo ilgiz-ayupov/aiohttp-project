@@ -98,8 +98,8 @@ async def send_question(message: types.Message, question_id: int = 1):
         seconds = seconds % 60
 
         text = f"""Викторина закончилась !
-Правильных ответов: {user_data["true_answer"]}
-Неправильных ответов: {user_data["false_answer"]}
+Правильных ответов: {user_data.get("true_answer", 0)}
+Неправильных ответов: {user_data.get("false_answer", 0)}
 Время: {hours} часов {minutes} минут {seconds} секунд"""
         await bot.send_message(chat_id, text)
 
