@@ -25,21 +25,19 @@ async def start(message: types.Message):
 
 
 async def register_user(message: types.Message):
+    """Регистрация пользователей в БД FireStore"""
     telegram_id = message.chat.id
     user_name = message.chat.username
     first_name = message.chat.first_name
-    doc_ref = database.db.collection(u'users').document(str(user_name))
+    last_name = message.chat.last_name
+
+    doc_ref = database.db.collection(u'users').document(str(telegram_id))
     doc_ref.set({
-        u'username': user_name,
-        u'first_name': first_name,
-        u'telegram_id': telegram_id
+        u'userName': user_name,
+        u'firstName': first_name,
+        u'lastName': last_name,
+        u'telegramId': telegram_id
     })
-
-    users_ref = database.db.collection(u'users')
-    docs = users_ref.stream()
-
-    for doc in docs:
-        print(f'{doc.id} => {doc.to_dict()}')
 
 
 @dp.message_handler(lambda message: "Начать викторину" in message.text)
