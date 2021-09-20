@@ -108,7 +108,7 @@ async def send_question(message: types.Message, question_id: int = 1):
         await bot.send_message(chat_id, text, reply_markup=keyboards.generate_remove_keyboard())
 
 
-def check_status(message: types.Message):
+async def check_status(message: types.Message):
     """Проверяет статус игрока
         Если пользователь закончил викторину не показываем ему вопросов
     """
