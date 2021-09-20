@@ -65,7 +65,7 @@ async def send_question(message: types.Message, question_id: int = 1):
 
         user_data = user_doc.to_dict()
         user_data["current_question"] = user_data.get("current_question", question_id) + 1
-        user_doc.set(user_data)
+        user_ref.set(user_data)
     else:
         await bot.send_message(chat_id, "Вопрос не найден !")
 
