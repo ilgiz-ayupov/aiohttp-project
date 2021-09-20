@@ -73,7 +73,7 @@ async def check_answer(message):
     question_doc = question.get()
 
     user = database.db.collection(u'users').document(str(question_id))
-    user_doc = question.get()
+    user_doc = user.get()
     if question_doc.exists and user_doc.exists:
         question_data = question_doc.to_dict()
         user_data = user_doc.to_dict()
