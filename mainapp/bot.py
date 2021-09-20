@@ -45,6 +45,22 @@ async def register_user(message: types.Message):
 async def start_quiz(message):
     chat_id = message.chat.id
     await bot.send_message(chat_id, "Викторина началась !")
+    await send_question(message)
+
+
+async def send_question(message: types.Message, question_id: int = 1):
+    """Отправить пользователю вопрос"""
+    chat_id = message.chat.id
+    doc_ref = database.db.collection(u'questions').document(str(question_id))
+
+    doc = doc_ref.get()
+    if doc.exists:
+        data = doc.to_dict()
+        text = f"""<strong>Вопрос № {question_id}</strong>\n{data["question"]}"""
+        await bot.send_message(chat_id, text, parse_mode="HTML",
+                               reply_markup=keyboards.generate_answer_options_menu(data["answer_options"]))
+    else:
+        await  bot.send_message(chat_id, "Вопрос не найден !")
 
 
 def start_webhook():
