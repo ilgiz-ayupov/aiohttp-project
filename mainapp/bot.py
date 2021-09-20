@@ -60,7 +60,12 @@ async def send_question(message: types.Message, question_id: int = 1):
         await bot.send_message(chat_id, text, parse_mode="HTML",
                                reply_markup=keyboards.generate_answer_options_menu(data["answer_options"]))
     else:
-        await  bot.send_message(chat_id, "Вопрос не найден !")
+        await bot.send_message(chat_id, "Вопрос не найден !")
+
+
+@dp.message_handler(lambda message: True)
+async def check_answer(message):
+    pass
 
 
 def start_webhook():
