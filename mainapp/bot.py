@@ -54,6 +54,8 @@ async def send_question(message: types.Message, question_id: int = 1):
     question_ref = database.db.collection(u'questions').document(str(question_id))
     question_doc = question_ref.get()
 
+    await bot.send_message(chat_id, str(question_id))
+
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_doc = user_ref.get()
 
@@ -85,8 +87,8 @@ async def check_answer(message):
 
     if question_doc.exists and user_doc.exists:
         question_data = question_doc.to_dict()
+        await bot.send_message(chat_id, f"{user_answer} {question_data['answer']}")
         if question_data["answer"] == user_answer:
-            await bot.send_message(chat_id, f"{user_answer} {question_data['answer']}")
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
             user_data["false_answer"] = user_data.get("false_answer", 0) + 1
