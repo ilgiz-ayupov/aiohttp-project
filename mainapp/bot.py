@@ -64,7 +64,7 @@ async def send_question(message: types.Message, question_id: int = 1):
                                reply_markup=keyboards.generate_answer_options_menu(data["answer_options"]))
 
         user_data = user_doc.to_dict()
-        user_data["current_question"] = user_data.get("current_question", question_id) + 1
+        user_data["currentQuestion"] = user_data.get("currentQuestion", question_id) + 1
         user_ref.set(user_data)
     else:
         await bot.send_message(chat_id, "Вопрос не найден !")
@@ -80,13 +80,13 @@ async def check_answer(message):
     user_data = user_doc.to_dict()
 
     question_id = user_data["current_question"]
-
     question = database.db.collection(u'questions').document(str(question_id))
     question_doc = question.get()
 
     if question_doc.exists and user_doc.exists:
         question_data = question_doc.to_dict()
         if question_data["answer"] == user_answer:
+            await bot.send_message(chat_id, "правильный ответ")
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
             user_data["false_answer"] = user_data.get("false_answer", 0) + 1
