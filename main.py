@@ -3,7 +3,7 @@ import argparse
 
 import aioreloader
 from aiohttp import web
-from mainapp import create_app, database
+from mainapp import create_app
 from mainapp import bot
 
 parser = argparse.ArgumentParser(description="Aiohttp project")
@@ -22,5 +22,4 @@ if args.reload:
 if __name__ == "__main__":
     print("Запуск сервера !")
     bot.start_webhook()
-    database.create_tables()
     web.run_app(app, port=int(os.environ["PORT"]))
