@@ -54,8 +54,7 @@ async def send_question(message: types.Message, question_id: int = 1):
     question_ref = database.db.collection(u'questions').document(str(question_id))
     question_doc = question_ref.get()
 
-    await bot.send_message(chat_id, str(question_id))
-
+    print("ВОПРОС №", question_id)
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_doc = user_ref.get()
 
