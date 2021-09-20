@@ -54,7 +54,6 @@ async def send_question(message: types.Message, question_id: int = 1):
     question_ref = database.db.collection(u'questions').document(str(question_id))
     question_doc = question_ref.get()
 
-    print("ВОПРОС №", question_id)
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_doc = user_ref.get()
 
@@ -75,7 +74,6 @@ async def send_question(message: types.Message, question_id: int = 1):
 async def check_answer(message):
     chat_id = message.chat.id
     user_answer = message.text
-    print("ОТВЕТ ПОЛЬЗОВАТЕЛЯ", user_answer)
 
     user = database.db.collection(u'users').document(str(chat_id))
     user_doc = user.get()
@@ -86,11 +84,8 @@ async def check_answer(message):
     question_doc = question.get()
 
     question_data = question_doc.to_dict()
-    print("ПРАВИЛЬНЫЙ ОТВЕТ", question_data["answer"])
 
     if question_doc.exists and user_doc.exists:
-        print("!!!")
-        print(user_answer, question_data['answer'])
         if question_data["answer"] == user_answer:
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
