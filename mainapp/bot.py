@@ -100,7 +100,7 @@ async def send_question(message: types.Message, question_id: int = 1):
 Правильных ответов: {user_data["true_answer"]}
 Неправильных ответов: {user_data["false_answer"]}
 Время: {hours} часов {minutes} минут {seconds} секунд"""
-        await bot.send_message(chat_id, "Вопрос не найден !")
+        await bot.send_message(chat_id, text)
 
 
 @dp.message_handler()
