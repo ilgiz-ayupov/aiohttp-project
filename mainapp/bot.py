@@ -108,19 +108,14 @@ async def send_question(message: types.Message, question_id: int = 1):
         await bot.send_message(chat_id, text, reply_markup=keyboards.generate_remove_keyboard())
 
 
-async def check_status(message: types.Message):
+def check_status(message: types.Message):
     """Проверяет статус игрока
         Если пользователь закончил викторину не показываем ему вопросов
     """
     chat_id = message.chat.id
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_data = user_ref.get().to_dict()
-
-    if user_data["status"] == "Проходит викторину":
-        return True
-    else:
-        await bot.send_message(chat_id, "Викторина закончена !")
-        return False
+    return user_data["status"] == "Проходит викторину"
 
 
 @dp.message_handler(lambda message: check_status(message))
