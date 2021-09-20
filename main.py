@@ -5,6 +5,7 @@ import aioreloader
 from aiohttp import web
 from mainapp import create_app
 from mainapp import bot
+from mainapp import settings
 
 parser = argparse.ArgumentParser(description="Aiohttp project")
 parser.add_argument("--host", help="YOUR HOST", default="localhost")
@@ -22,4 +23,4 @@ if args.reload:
 if __name__ == "__main__":
     print("Запуск сервера !")
     bot.start_webhook()
-    web.run_app(app, port=int(os.environ["PORT"]))
+    web.run_app(app, port=settings.WEBAPP_PORT)

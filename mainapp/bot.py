@@ -51,14 +51,21 @@ async def start_quiz(message):
 async def send_question(message: types.Message, question_id: int = 1):
     """Отправить пользователю вопрос"""
     chat_id = message.chat.id
-    doc_ref = database.db.collection(u'questions').document(str(question_id))
+    question_ref = database.db.collection(u'questions').document(str(question_id))
+    question_doc = question_ref.get()
 
-    doc = doc_ref.get()
-    if doc.exists:
-        data = doc.to_dict()
+    user_ref = database.db.collection(u'users').document(str(chat_id))
+    user_doc = user_ref.get()
+
+    if question_doc.exists and user_doc.exists:
+        data = question_doc.to_dict()
         text = f"""<strong>Вопрос № {question_id}</strong>\n{data["question"]}"""
         await bot.send_message(chat_id, text, parse_mode="HTML",
                                reply_markup=keyboards.generate_answer_options_menu(data["answer_options"]))
+
+        user_data = user_doc.to_dict()
+        user_data["current_question"] = user_data.get("current_question", question_id) + 1
+        user_doc.set(user_data)
     else:
         await bot.send_message(chat_id, "Вопрос не найден !")
 
@@ -67,16 +74,18 @@ async def send_question(message: types.Message, question_id: int = 1):
 async def check_answer(message):
     chat_id = message.chat.id
     user_answer = message.text
-    question_id = 1
+
+    user = database.db.collection(u'users').document(str(chat_id))
+    user_doc = user.get()
+    user_data = user_doc.to_dict()
+
+    question_id = user_data["current_question"]
 
     question = database.db.collection(u'questions').document(str(question_id))
     question_doc = question.get()
 
-    user = database.db.collection(u'users').document(str(question_id))
-    user_doc = user.get()
     if question_doc.exists and user_doc.exists:
         question_data = question_doc.to_dict()
-        user_data = user_doc.to_dict()
         if question_data["answer"] == user_answer:
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
