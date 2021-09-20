@@ -96,7 +96,7 @@ async def check_answer(message):
         else:
             user_data["false_answer"] = user_data.get("false_answer", 0) + 1
         user.set(user_data)
-        await send_question(message, question_id)
+        await send_question(message, user_data["currentQuestion"])
     else:
         await bot.send_message(chat_id, "Вопрос не найден !")
 
