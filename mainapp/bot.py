@@ -51,7 +51,8 @@ async def register_user(message: types.Message):
         u'userName': user_name,
         u'firstName': first_name,
         u'lastName': last_name,
-        u'telegramId': telegram_id
+        u'telegramId': telegram_id,
+        u"status": "Авторизовался"
     })
     await bot.send_message(telegram_id, "Авторизация прошла успешно !")
 
@@ -63,7 +64,8 @@ async def start_quiz(message):
 
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_data = user_ref.get().to_dict()
-    user_data["time_start"] = user_data.get("time_start", datetime.datetime.now())
+    user_data["time_start"] = datetime.datetime.now()
+    user_data["status"] = "Проходит викторину"
 
     user_ref.set(user_data)
     await send_question(message)
@@ -96,15 +98,27 @@ async def send_question(message: types.Message, question_id: int = 1):
         hours = days * 24 + seconds // 3600
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
+        user_data["status"] = "Закончил викторину"
 
         text = f"""Викторина закончилась !
 Правильных ответов: {user_data.get("true_answer", 0)}
 Неправильных ответов: {user_data.get("false_answer", 0)}
 Время: {hours} часов {minutes} минут {seconds} секунд"""
-        await bot.send_message(chat_id, text)
+        await bot.send_message(chat_id, text, reply_markup=keyboards.generate_remove_keyboard())
 
 
-@dp.message_handler()
+def check_status(message: types.Message):
+    """Проверяет статус игрока
+        Если пользователь закончил викторину не показываем ему вопросов
+    """
+    chat_id = message.chat.id
+    user_ref = database.db.collection(u'users').document(str(chat_id))
+    user_data = user_ref.get().to_dict()
+
+    return user_data["status"] == "Проходит викторину"
+
+
+@dp.message_handler(lambda message: check_status(message))
 async def check_answer(message):
     chat_id = message.chat.id
     user_answer = message.text

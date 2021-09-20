@@ -1,4 +1,4 @@
-from aiogram.types.reply_keyboard import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types.reply_keyboard import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 
 def generate_quiz_start_menu() -> ReplyKeyboardMarkup:
@@ -23,3 +23,7 @@ def generate_answer_options_menu(answer_options: list, max_quantity: int = 2) ->
         start = end
         end += max_quantity
     return ReplyKeyboardMarkup(keyboard=buttons, row_width=2)
+
+
+def generate_remove_keyboard() -> ReplyKeyboardRemove:
+    return ReplyKeyboardRemove()
