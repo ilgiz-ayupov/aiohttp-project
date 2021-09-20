@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+import datetime
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
@@ -63,7 +63,7 @@ async def start_quiz(message):
 
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_data = user_ref.get().to_dict()
-    user_data["time_start"] = user_data.get("time_start", datetime.now())
+    user_data["time_start"] = user_data.get("time_start", datetime.datetime.now())
 
     user_ref.set(user_data)
     await send_question(message)
@@ -88,9 +88,10 @@ async def send_question(message: types.Message, question_id: int = 1):
         user_data["currentQuestion"] = user_data.get("currentQuestion", question_id) + 1
         user_ref.set(user_data)
     else:
-        end_time = datetime.now()
+        time_start = datetime.timedelta(seconds=datetime.datetime.timestamp(user_data["time_start"]))
+        end_time = datetime.timedelta(seconds=datetime.datetime.timestamp(datetime.datetime.now()))
 
-        duration = end_time - user_data["time_start"]
+        duration = end_time - time_start
         days, seconds = duration.days, duration.seconds
         hours = days * 24 + seconds // 3600
         minutes = (seconds % 3600) // 60
