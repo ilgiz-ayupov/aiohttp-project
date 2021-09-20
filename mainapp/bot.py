@@ -1,5 +1,5 @@
 import logging
-
+from datetime import datetime
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
@@ -60,6 +60,12 @@ async def register_user(message: types.Message):
 async def start_quiz(message):
     chat_id = message.chat.id
     await bot.send_message(chat_id, "Викторина началась !")
+
+    user_ref = database.db.collection(u'users').document(str(chat_id))
+    user_data = user_ref.get().to_dict()
+    user_data["time_start"] = user_data.get("time_start", datetime.now())
+
+    user_ref.set(user_data)
     await send_question(message)
 
 
@@ -71,6 +77,7 @@ async def send_question(message: types.Message, question_id: int = 1):
 
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_doc = user_ref.get()
+    user_data = user_doc.to_dict()
 
     if question_doc.exists and user_doc.exists:
         data = question_doc.to_dict()
@@ -78,10 +85,21 @@ async def send_question(message: types.Message, question_id: int = 1):
         await bot.send_message(chat_id, text, parse_mode="HTML",
                                reply_markup=keyboards.generate_answer_options_menu(data["answer_options"]))
 
-        user_data = user_doc.to_dict()
         user_data["currentQuestion"] = user_data.get("currentQuestion", question_id) + 1
         user_ref.set(user_data)
     else:
+        end_time = datetime.now()
+
+        duration = end_time - user_data["time_start"]
+        days, seconds = duration.days, duration.seconds
+        hours = days * 24 + seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+
+        text = f"""Викторина закончилась !
+Правильных ответов: {user_data["true_answer"]}
+Неправильных ответов: {user_data["false_answer"]}
+Время: {hours} часов {minutes} минут {seconds} секунд"""
         await bot.send_message(chat_id, "Вопрос не найден !")
 
 
