@@ -86,7 +86,7 @@ async def check_answer(message):
 
     if question_doc.exists and user_doc.exists:
         question_data = question_doc.to_dict()
-        await bot.send_message(chat_id, f"{user_answer} {question_data['answer']}")
+        print(f"{user_answer} {question_data['answer']}")
         if question_data["answer"] == user_answer:
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
         else:
