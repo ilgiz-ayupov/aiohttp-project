@@ -99,6 +99,7 @@ async def send_question(message: types.Message, question_id: int = 1):
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
         user_data["status"] = "Закончил викторину"
+        user_ref.set(user_data)
 
         text = f"""Викторина закончилась !
 Правильных ответов: {user_data.get("true_answer", 0)}
@@ -115,7 +116,11 @@ def check_status(message: types.Message):
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_data = user_ref.get().to_dict()
 
-    return user_data["status"] == "Проходит викторину"
+    if user_data["status"] == "Проходит викторину":
+        return True
+    else:
+        await bot.send_message(chat_id, "Викторина закончена !")
+        return False
 
 
 @dp.message_handler(lambda message: check_status(message))
