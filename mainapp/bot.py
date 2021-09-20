@@ -81,12 +81,15 @@ async def check_answer(message):
     user_doc = user.get()
     user_data = user_doc.to_dict()
 
-    question_id = user_data["currentQuestion"]
+    question_id = user_data["currentQuestion"] - 1
     question = database.db.collection(u'questions').document(str(question_id))
     question_doc = question.get()
 
+    question_data = question_doc.to_dict()
+    print("ПРАВИЛЬНЫЙ ОТВЕТ", question_data["answer"])
+
     if question_doc.exists and user_doc.exists:
-        question_data = question_doc.to_dict()
+        print("!!!")
         print(user_answer, question_data['answer'])
         if question_data["answer"] == user_answer:
             user_data["true_answer"] = user_data.get("true_answer", 0) + 1
