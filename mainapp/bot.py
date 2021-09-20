@@ -38,6 +38,7 @@ async def register_user(message: types.Message):
         u'lastName': last_name,
         u'telegramId': telegram_id
     })
+    await bot.send_message(telegram_id, "Авторизация прошла успешно !")
 
 
 @dp.message_handler(lambda message: "Начать викторину" in message.text)
