@@ -79,7 +79,7 @@ async def check_answer(message):
     user_doc = user.get()
     user_data = user_doc.to_dict()
 
-    question_id = user_data["current_question"]
+    question_id = user_data["currentQuestion"]
     question = database.db.collection(u'questions').document(str(question_id))
     question_doc = question.get()
 
