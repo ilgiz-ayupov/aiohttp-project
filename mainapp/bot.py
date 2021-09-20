@@ -59,9 +59,13 @@ async def register_user(message: types.Message):
 
 @dp.message_handler(lambda message: "Начать викторину" in message.text)
 async def start_quiz(message):
+    """Старт викторины"""
     chat_id = message.chat.id
     await bot.send_message(chat_id, "Викторина началась !")
 
+    # Добавляем пользователю новые параметры:
+    #       Время начала викторины
+    #       Статус : Проходит викторину
     user_ref = database.db.collection(u'users').document(str(chat_id))
     user_data = user_ref.get().to_dict()
     user_data["time_start"] = datetime.datetime.now()
@@ -90,6 +94,8 @@ async def send_question(message: types.Message, question_id: int = 1):
         user_data["currentQuestion"] = user_data.get("currentQuestion", question_id) + 1
         user_ref.set(user_data)
     else:
+        # Вопросов больше нет
+        # Викторина закончена ! Главное не забыть предупредить об этом пользователя )
         time_start = datetime.timedelta(seconds=datetime.datetime.timestamp(user_data["time_start"]))
         end_time = datetime.timedelta(seconds=datetime.datetime.timestamp(datetime.datetime.now()))
 
@@ -120,6 +126,7 @@ def check_status(message: types.Message):
 
 @dp.message_handler(lambda message: check_status(message))
 async def check_answer(message):
+    """Проверка ответа пользователя"""
     chat_id = message.chat.id
     user_answer = message.text
 
@@ -141,10 +148,12 @@ async def check_answer(message):
         user.set(user_data)
         await send_question(message, user_data["currentQuestion"])
     else:
+        # На тот случай есль Firebase упадёт )
         await bot.send_message(chat_id, "Вопрос не найден !")
 
 
 def start_webhook():
+    """Запускает webhook"""
     delete_webhook = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?drop_pending_updates=True"
     requests.post(delete_webhook)
 
