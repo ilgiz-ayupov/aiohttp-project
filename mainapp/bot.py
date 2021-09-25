@@ -104,6 +104,8 @@ async def send_question(message: types.Message, question_id: int = 1):
         hours = days * 24 + seconds // 3600
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
+
+        user_data["durationQuiz"] = f"{hours} часов {minutes} минут {seconds} секунд"
         user_data["status"] = "Закончил викторину"
         user_ref.set(user_data)
 
