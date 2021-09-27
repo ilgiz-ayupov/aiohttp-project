@@ -1,5 +1,4 @@
 from aiogram.types.reply_keyboard import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-import random
 
 
 def generate_quiz_start_menu() -> ReplyKeyboardMarkup:
@@ -16,7 +15,7 @@ def generate_answer_options_menu(answer_options: list, max_quantity: int = 2) ->
         rows += 1
 
     buttons = []
-    answer_options = random.choices(answer_options)
+    answer_options = set(answer_options)
     for i in range(rows):
         new_lst = []
         for option in answer_options[start:end]:
