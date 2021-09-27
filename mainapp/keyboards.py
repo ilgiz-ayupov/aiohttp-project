@@ -16,9 +16,10 @@ def generate_answer_options_menu(answer_options: list, max_quantity: int = 2) ->
         rows += 1
 
     buttons = []
+    answer_options = random.choices(answer_options)
     for i in range(rows):
         new_lst = []
-        for option in random.choices(answer_options[start:end]):
+        for option in answer_options[start:end]:
             new_lst.append(KeyboardButton(text=option))
         buttons.append(new_lst)
         start = end
