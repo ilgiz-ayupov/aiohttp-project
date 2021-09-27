@@ -16,6 +16,7 @@ def generate_answer_options_menu(answer_options: list, max_quantity: int = 2) ->
 
     buttons = []
     answer_options = set(answer_options)
+    answer_options = list(answer_options)
     for i in range(rows):
         new_lst = []
         for option in answer_options[start:end]:
