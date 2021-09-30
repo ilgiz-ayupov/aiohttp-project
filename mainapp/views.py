@@ -6,11 +6,11 @@ from aiohttp_jinja2 import template
 from aiogram import types
 
 from . import bot
+from database import db
 
 
 @template("index.html")
 async def index(request: web.Request):
-    print(request)
     return {"username": "Ильгиз"}
 
 
@@ -24,3 +24,8 @@ async def webhook(request: web.Request):
         },
         status=201
     )
+
+
+async def save_image(request: web.Request):
+    data = await request.json()
+    print(data)
